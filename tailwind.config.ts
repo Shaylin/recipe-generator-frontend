@@ -26,7 +26,7 @@ const config: Config = {
       "dut-magenta": "#83206e",
       "dut-green": "#137f36",
       "dut-red": "#ce141a",
-      "dut-blue": "#ce141a",
+      "dut-blue": "#4b62a1",
       "dut-pink": "#ad6daa"
     }
   },

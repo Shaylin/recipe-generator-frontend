@@ -5,13 +5,10 @@ export default function NavMenu() {
     return (
         <nav className={"flex flex-row justify-evenly items-center w-128 text-lg"}>
             <Link href="/sweets">
-                <p className="text-primary-light hover:text-secondary-light hover:underline">Sweets</p>
+                <p className="text-primary-light hover:text-secondary-light hover:underline">Project Info</p>
             </Link>
             <Link href="/savouries">
-                <p className="text-primary-light hover:text-secondary-light hover:underline">Savouries</p>
-            </Link>
-            <Link href="/delivery">
-                <p className="text-primary-light hover:text-secondary-light hover:underline">Delivery Info</p>
+                <p className="text-primary-light hover:text-secondary-light hover:underline">Login</p>
             </Link>
         </nav>
     )
