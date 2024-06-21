@@ -8,7 +8,7 @@ export default function NavMenu() {
                 <p className="text-primary-light hover:text-secondary-light hover:underline">Project Info</p>
             </Link>
             <Link href="/savouries">
-                <p className="text-primary-light hover:text-secondary-light hover:underline">Login</p>
+                <p className="text-primary-light hover:text-secondary-light hover:underline">Other Info</p>
             </Link>
         </nav>
     )
