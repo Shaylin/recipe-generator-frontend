@@ -17,10 +17,9 @@ describe("Nav Menu", () => {
 
         const linkElements = screen.getAllByRole("link");
 
-        expect(linkElements.length).toBe(3);
+        expect(linkElements.length).toBe(2);
 
-        expect(screen.getByText("Sweets")).toBeInTheDocument();
-        expect(screen.getByText("Savouries")).toBeInTheDocument();
-        expect(screen.getByText("Delivery Info")).toBeInTheDocument();
+        expect(screen.getByText("Project Info")).toBeInTheDocument();
+        expect(screen.getByText("Other Info")).toBeInTheDocument();
     });
 });
