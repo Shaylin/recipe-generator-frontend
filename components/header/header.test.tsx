@@ -4,11 +4,11 @@ import {render, screen} from "@testing-library/react";
 import Header from "@/components/header/header";
 
 describe("Header", () => {
-    it("Should render a component with the banner role", () => {
-        render(<Header/>);
+  it("Should render a component with the banner role", () => {
+    render(<Header/>);
 
-        const bannerElement = screen.getByRole("banner");
+    const bannerElement = screen.getByRole("banner");
 
-        expect(bannerElement).toBeInTheDocument();
-    });
+    expect(bannerElement).toBeInTheDocument();
+  });
 });
