@@ -1,9 +1,8 @@
 import Link from "next/link";
 
-export default function NavMenu() {
-  //TODO: Placeholder for now
+export default function WideNavMenu({className}: { className: string }) {
   return (
-    <nav className={"flex flex-row justify-evenly items-center w-128 text-lg"}>
+    <nav className={`${className} flex-row justify-evenly items-center w-128 text-lg`}>
       <Link href="/sweets">
         <p className="text-primary-light hover:text-secondary-light hover:underline">Project Info</p>
       </Link>
