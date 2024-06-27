@@ -1,14 +1,13 @@
-import { Fragment } from "react";
+import { Fragment, JSX } from "react";
 import Header from "@/components/header/header";
+import RecipeGenerator from "@/components/recipeGenerator/recipeGenerator";
 
-export default function Home() {
+export default function Home(): JSX.Element {
   return (
     <Fragment>
       <Header/>
-      <main className="flex min-h-48 flex-col items-center justify-between mt-32 p-6">
-        <div className="max-w-screen-lg bg-light-background p-6 rounded-md shadow">
-          DUT Diabetic-Friendly Recipe Generator
-        </div>
+      <main className="flex min-h-48 flex-col items-center justify-between mt-24 p-6">
+        <RecipeGenerator/>
       </main>
     </Fragment>
   );
