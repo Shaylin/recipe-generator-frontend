@@ -4,6 +4,8 @@ describe("OpenAIRecipeInferenceService", () => {
   let service: OpenAIRecipeInferenceService;
   let mockOpenAIClientGenerator: jest.Mock;
   let fakeOpenAIClient: { chat: { completions: { create: jest.Mock } } };
+  let consoleErrorSpy: jest.Mock;
+  let originalConsoleError: (args: any) => void;
   
   beforeEach(() => {
     process.env = {
@@ -12,11 +14,20 @@ describe("OpenAIRecipeInferenceService", () => {
       INFERENCE_API_URL: "fakeURL"
     };
     
+    consoleErrorSpy = jest.fn();
+    
+    originalConsoleError = console.error;
+    console.error = consoleErrorSpy;
+    
     mockOpenAIClientGenerator = jest.fn();
     fakeOpenAIClient = { chat: { completions: { create: jest.fn() } } };
     mockOpenAIClientGenerator.mockReturnValue(fakeOpenAIClient);
     
     service = new OpenAIRecipeInferenceService(mockOpenAIClientGenerator);
+  });
+  
+  afterAll(() => {
+    console.error = originalConsoleError;
   })
   
   describe("Constructor", () => {
@@ -76,6 +87,8 @@ describe("OpenAIRecipeInferenceService", () => {
         expect(generatedRecipeResponse.title).toBeFalsy();
         expect(generatedRecipeResponse.ingredients).toBeFalsy();
         expect(generatedRecipeResponse.method).toBeFalsy();
+        
+        expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
       });
     });
     
@@ -83,7 +96,7 @@ describe("OpenAIRecipeInferenceService", () => {
       it("Should return an empty failure response", async () => {
         fakeOpenAIClient.chat.completions.create.mockResolvedValue(null);
         
-        const generatedRecipeResponse = await service.generateRecipe(["onion", "pepper"]);
+        const generatedRecipeResponse = await service.generateRecipe(["onion", "paper"]);
         expect(generatedRecipeResponse.success).toBe(false);
         expect(generatedRecipeResponse.title).toBeFalsy();
         expect(generatedRecipeResponse.ingredients).toBeFalsy();
