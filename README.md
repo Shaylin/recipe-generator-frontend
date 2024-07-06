@@ -1,4 +1,8 @@
-# DUT Recipe Generator Portal
+# DUT Recipe Generator Front End
 
-### Developing
-`npm run dev`
+
+## Design & Implementation Details
+
+
+## Running This Project
+- `npm run dev`

@@ -24,7 +24,7 @@ const config: Config = {
     colors: {
       "light-tone": "#F2E9D0",
       "muted-tone": "#CFD9CF",
-      "bright-tone": "#8FBBB7",
+      "bright-tone": "#CE141A",
       "highlight-tone": "#3F718D",
       "dark-tone": "#283641",
       "white": "#FFFFFF"
