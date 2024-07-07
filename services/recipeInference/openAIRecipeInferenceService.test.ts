@@ -3,7 +3,7 @@ import OpenAIRecipeInferenceService from "@/services/recipeInference/openAIRecip
 describe("OpenAIRecipeInferenceService", () => {
   let service: OpenAIRecipeInferenceService;
   let mockOpenAIClientGenerator: jest.Mock;
-  let fakeOpenAIClient: { chat: { completions: { create: jest.Mock } } };
+  let fakeOpenAIClient: { createCompletions: jest.Mock };
   let consoleErrorSpy: jest.Mock;
   let originalConsoleError: (args: any) => void;
   
@@ -20,7 +20,7 @@ describe("OpenAIRecipeInferenceService", () => {
     console.error = consoleErrorSpy;
     
     mockOpenAIClientGenerator = jest.fn();
-    fakeOpenAIClient = { chat: { completions: { create: jest.fn() } } };
+    fakeOpenAIClient = { createCompletions: jest.fn() };
     mockOpenAIClientGenerator.mockReturnValue(fakeOpenAIClient);
     
     service = new OpenAIRecipeInferenceService(mockOpenAIClientGenerator);
@@ -41,24 +41,19 @@ describe("OpenAIRecipeInferenceService", () => {
   describe("generateRecipe", () => {
     describe("When the server returns a valid JSON response", () => {
       it("Should return a successful recipe response", async () => {
-        fakeOpenAIClient.chat.completions.create.mockResolvedValue({
+        fakeOpenAIClient.createCompletions.mockResolvedValue({
           choices: [
             {
-              message: {
-                content: JSON.stringify({ title: "My Recipe", ingredients: ["onion", "pepper"], method: ["mix well"] })
-              }
+              text: ', "title": "My Recipe", "ingredients": ["onion", "pepper"], "method": ["mix well"] }'
             }
           ]
         });
         
         const generatedRecipeResponse = await service.generateRecipe(["onion", "pepper"]);
         
-        expect(fakeOpenAIClient.chat.completions.create).toHaveBeenCalledWith({
+        expect(fakeOpenAIClient.createCompletions).toHaveBeenCalledWith({
           model: "shaylinc/dut-recipe-generator",
-          messages: [
-            { "role": "user", "content": `{"prompt": ${JSON.stringify(["onion", "pepper"])}` }
-          ],
-          stream: false,
+          prompt: '{"prompt": ["onion","pepper"]',
           max_tokens: 1024,
           temperature: 0.2
         });
@@ -72,12 +67,10 @@ describe("OpenAIRecipeInferenceService", () => {
     
     describe("When the server returns a response that is not valid JSON", () => {
       it("Should return an empty failure response", async () => {
-        fakeOpenAIClient.chat.completions.create.mockResolvedValue({
+        fakeOpenAIClient.createCompletions.mockResolvedValue({
           choices: [
             {
-              message: {
-                content: 'title: "My Recipe", ingredients: ["onionez", "pepper"]'
-              }
+              text: ', "title": "My Recipe", ingredients: ["onionez", "pepper", "method": ["mix well"] }'
             }
           ]
         });
@@ -94,7 +87,7 @@ describe("OpenAIRecipeInferenceService", () => {
     
     describe("When the server does not return a valid response", () => {
       it("Should return an empty failure response", async () => {
-        fakeOpenAIClient.chat.completions.create.mockResolvedValue(null);
+        fakeOpenAIClient.createCompletions.mockResolvedValue(null);
         
         const generatedRecipeResponse = await service.generateRecipe(["onion", "paper"]);
         expect(generatedRecipeResponse.success).toBe(false);

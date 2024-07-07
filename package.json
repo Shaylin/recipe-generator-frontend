@@ -13,7 +13,7 @@
     "@aws-sdk/client-dynamodb": "^3.609.0",
     "@headlessui/react": "^2.0.4",
     "next": "14.2.4",
-    "openai": "^4.52.2",
+    "openai-fetch": "^2.0.3",
     "react": "^18",
     "react-dom": "^18"
   },

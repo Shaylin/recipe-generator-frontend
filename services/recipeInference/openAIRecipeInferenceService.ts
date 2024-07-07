@@ -1,31 +1,29 @@
 import RecipeInferenceService from "@/services/recipeInference/recipeInferenceService";
-import OpenAI from "openai";
 import { GeneratedRecipeResponse } from "@/services/recipeInference/generatedRecipeResponse";
-import { ChatCompletion } from "openai/resources/chat/completions";
+import { CompletionResponse, OpenAIClient } from "openai-fetch";
 
 export default class OpenAIRecipeInferenceService implements RecipeInferenceService {
-  private readonly client: OpenAI;
+  private readonly client: OpenAIClient;
   
-  public constructor(openAiClientGenerator: (apiKey: string, baseURL: string) => OpenAI) {
+  public constructor(openAiClientGenerator: (apiKey: string, baseUrl: string) => OpenAIClient) {
     this.client = openAiClientGenerator(process.env["INFERENCE_API_KEY"]!, process.env["INFERENCE_API_URL"]!);
   }
   
   public async generateRecipe(ingredients: string[]): Promise<GeneratedRecipeResponse> {
     
-    const generationResponse = await this.client.chat.completions.create({
+    const prompt = this.generatePrompt(ingredients)
+    
+    const generationResponse = await this.client.createCompletions({
       model: "shaylinc/dut-recipe-generator",
-      messages: [
-        { "role": "user", "content": this.generatePrompt(ingredients) }
-      ],
+      prompt: prompt,
       temperature: 0.2,
-      max_tokens: 1024,
-      stream: false
+      max_tokens: 1024
     });
     
-    return this.tryParseRecipeResponse(generationResponse);
+    return this.tryParseRecipeResponse(prompt, generationResponse);
   }
   
-  private tryParseRecipeResponse(generationResponse: ChatCompletion): GeneratedRecipeResponse {
+  private tryParseRecipeResponse(prompt: string, generationResponse: CompletionResponse): GeneratedRecipeResponse {
     if (!generationResponse || !generationResponse.choices) {
       return {
         success: false
@@ -33,7 +31,7 @@ export default class OpenAIRecipeInferenceService implements RecipeInferenceServ
     }
     
     try {
-      const parsedRecipe = JSON.parse(generationResponse.choices[0].message.content!);
+      const parsedRecipe = JSON.parse(prompt + generationResponse.choices[0].text);
       return {
         success: true,
         title: parsedRecipe.title,
@@ -49,6 +47,6 @@ export default class OpenAIRecipeInferenceService implements RecipeInferenceServ
   }
   
   private generatePrompt(ingredients: string[]): string {
-    return `{"prompt": ${JSON.stringify(ingredients)}`;
+    return '{"prompt": ' + JSON.stringify(ingredients);
   }
 }

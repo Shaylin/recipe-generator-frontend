@@ -5,7 +5,7 @@ import IngredientsInput from "@/components/ingredientsInput/ingredientsInput";
 
 export default function RecipeGenerator(): JSX.Element {
   const [recipe, setRecipe] = useState(null);
-  const [ingredients, setIngredients] = useState("");
+  const [ingredients, setIngredients] = useState<string>("");
   
   const fetchData = () => {
     fetch("/api/generate", { method: "POST", body: "somehow need to get the input contents?" })
@@ -18,14 +18,15 @@ export default function RecipeGenerator(): JSX.Element {
       <h1>DUT Diabetic-Friendly Recipe Generator</h1>
       
       <div className="flex flex-row gap-8">
-        <IngredientsInput onUpdate={() => {
-          setIngredients("babble");
-          return;
-        }}/>
+        <IngredientsInput onUpdate={(ingredientsList: string) => setIngredients(ingredientsList)}/>
         <button onClick={fetchData}>Generate!</button>
       </div>
       
       <div>{recipe ? JSON.stringify(recipe) : "Loading..."}</div>
+      
+      <div>
+        Ingredio: {ingredients}
+      </div>
     </div>
   )
 }
