@@ -8,7 +8,7 @@ export default function RecipeGenerator(): JSX.Element {
   const [ingredients, setIngredients] = useState<string>("");
   
   const fetchData = () => {
-    fetch("/api/generate", { method: "POST", body: "somehow need to get the input contents?" })
+    fetch("/api/generate", { method: "POST", body: JSON.stringify({ ingredients: ingredients }) })
       .then(response => response.json())
       .then(data => setRecipe(data));
   };
