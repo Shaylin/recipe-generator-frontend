@@ -1,16 +1,21 @@
 "use client"
 
 import React, { JSX, useState } from "react";
+import { Button } from "@headlessui/react";
 import IngredientsInput from "@/components/ingredientsInput/ingredientsInput";
 
 export default function RecipeGenerator(): JSX.Element {
-  const [recipe, setRecipe] = useState(null);
+  const [recipe, setRecipe] = useState<object>({});
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [ingredients, setIngredients] = useState<string>("");
   
   const fetchData = () => {
+    setIsGenerating(true);
+    
     fetch("/api/generate", { method: "POST", body: JSON.stringify({ ingredients: ingredients }) })
       .then(response => response.json())
-      .then(data => setRecipe(data));
+      .then(data => setRecipe(data))
+      .finally(() => setIsGenerating(false));
   };
   
   return (
@@ -19,10 +24,12 @@ export default function RecipeGenerator(): JSX.Element {
       
       <div className="flex flex-row gap-8">
         <IngredientsInput onUpdate={(ingredientsList: string) => setIngredients(ingredientsList)}/>
-        <button onClick={fetchData}>Generate!</button>
+        <Button onClick={fetchData} className="border-2 rounded p-2">Generate !</Button>
       </div>
       
-      <div>{recipe ? JSON.stringify(recipe) : "Loading..."}</div>
+      {isGenerating && <div>Loading ... </div>}
+      
+      {recipe && <div>{JSON.stringify(recipe)}</div>}
       
       <div>
         Ingredio: {ingredients}
