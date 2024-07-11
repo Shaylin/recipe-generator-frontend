@@ -25,10 +25,10 @@ export default function RecipeGenerator(): JSX.Element {
       
       <div className="flex flex-row gap-8">
         <IngredientsInput onUpdate={(ingredientsList: string) => setIngredients(ingredientsList)}/>
-        <Button onClick={fetchData} className="btn btn-primary">Generate !</Button>
+        <Button onClick={fetchData} className="btn btn-neutral">Generate !</Button>
       </div>
       
-      {isGenerating && <span className="loading loading-spinner text-accent"></span>}
+      {isGenerating && <span className="loading loading-spinner text-highlight-tone"></span>}
       
       {recipe?.success && <div>{JSON.stringify(recipe)}</div>}
     </div>
