@@ -39,6 +39,26 @@ describe("OpenAIRecipeInferenceService", () => {
   });
   
   describe("generateRecipe", () => {
+    it("Should trim and lowercase the input ingredients array before passing it to the inference api", async () => {
+      fakeOpenAIClient.createCompletions.mockResolvedValue({
+        choices: [
+          {
+            text: ', "title": "My Recipe", "ingredients": ["onion", "pepper"], "method": ["mix well"] }'
+          }
+        ]
+      });
+      
+      const generatedRecipeResponse = await service.generateRecipe(["OnIoN", "    peppeR "]);
+      
+      expect(fakeOpenAIClient.createCompletions).toHaveBeenCalledWith({
+        model: "shaylinc/dut-recipe-generator",
+        prompt: '{"prompt": ["onion","pepper"]',
+        max_tokens: 1024,
+        temperature: 0.2
+      });
+    });
+    
+    
     describe("When the server returns a valid JSON response", () => {
       it("Should return a successful recipe response", async () => {
         fakeOpenAIClient.createCompletions.mockResolvedValue({

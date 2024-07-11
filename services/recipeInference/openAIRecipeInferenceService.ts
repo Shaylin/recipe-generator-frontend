@@ -47,6 +47,8 @@ export default class OpenAIRecipeInferenceService implements RecipeInferenceServ
   }
   
   private generatePrompt(ingredients: string[]): string {
-    return '{"prompt": ' + JSON.stringify(ingredients);
+    const formattedIngredients = ingredients.map((ingredient: string ) => ingredient.toLowerCase().trim());
+    
+    return '{"prompt": ' + JSON.stringify(formattedIngredients);
   }
 }
