@@ -5,7 +5,7 @@ export default function IngredientsInput(props: { onUpdate: (ingredientsList: st
   return (
     <div>
       <Input type="text" placeholder="Enter Ingredients..."
-        className="input input-bordered input-neutral w-full max-w-xs"
+        className="input input-bordered input-neutral w-full max-w-lg"
         onChange={((changeEvent: ChangeEvent<HTMLInputElement>) => props.onUpdate(changeEvent.target.value))}/>
     </div>
   )
