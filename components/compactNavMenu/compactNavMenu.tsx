@@ -28,7 +28,7 @@ export default function CompactNavMenu({ className }: { className: string }): JS
       >
         <nav
           className="fixed flex gap-1 flex-col items-center bg-highlight-tone w-full left-0 top-24 p-2 text-lg">
-          <Link href="/sweets">
+          <Link href="/projectInfo">
             <p className="text-white hover:text-bright-tone hover:underline">Project Info</p>
           </Link>
           <Link href="/savouries">
