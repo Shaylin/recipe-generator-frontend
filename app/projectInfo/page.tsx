@@ -11,5 +11,5 @@ export default function ProjectInfo(): JSX.Element {
       </main>
       <Footer/>
     </Fragment>
-    )
+  )
 }

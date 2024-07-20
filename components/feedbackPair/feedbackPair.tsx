@@ -1,8 +1,8 @@
 import { JSX, useState } from "react";
 import { GeneratedRecipeResponse } from "@/services/recipeInference/generatedRecipeResponse";
-import { Button } from "@headlessui/react";
 import Image from "next/image";
 import { GeneratedRecipeFeedback } from "@/app/api/feedback/generatedRecipeFeedback";
+import { Button } from "@nextui-org/button";
 
 export default function FeedbackPair(props: { response: GeneratedRecipeResponse }): JSX.Element {
   const [feedbackSent, setFeedbackSent] = useState<boolean | null>(null);

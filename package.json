@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.609.0",
-    "@headlessui/react": "^2.0.4",
-    "daisyui": "^4.12.10",
+    "@nextui-org/react": "^2.4.6",
+    "framer-motion": "^11.3.8",
     "next": "14.2.4",
     "openai-fetch": "^2.0.3",
     "react": "^18",
