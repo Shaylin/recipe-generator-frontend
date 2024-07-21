@@ -33,6 +33,7 @@ const config: Config = {
       "white": "#FFFFFF"
     }
   },
+  darkMode: "class",
   plugins: [
     nextui()
   ],

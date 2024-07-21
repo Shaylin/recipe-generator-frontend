@@ -33,7 +33,7 @@ export default function RecipeGenerator(): JSX.Element {
           className={`btn btn-neutral w-32 ${isGenerating ? "animate-pulse pointer-events-none" : null}`}>{isGenerating ? "Generating..." : "Generate!"}</Button>
       </div>
       
-      {isGenerating && <Spinner/>}
+      {isGenerating && <Spinner className="text-light-tone" color="primary" size="lg" label="Generating..."/>}
       
       {(recipe?.success && !isGenerating) && <RecipeDisplay recipe={recipe}/>}
       
