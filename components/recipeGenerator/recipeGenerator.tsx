@@ -24,7 +24,7 @@ export default function RecipeGenerator(): JSX.Element {
   
   return (
     <div
-      className="flex flex-col items-center max-w-screen-lg sm:w-10/12 w-11/12 bg-light-tone p-6 rounded-md shadow gap-8">
+      className="flex flex-col items-center max-w-screen-lg sm:w-10/12 w-11/12 bg-light-tone p-6 rounded-xl shadow gap-8">
       <h1>DUT Diabetic-Friendly Recipe Generator</h1>
       
       <div className="flex flex-row flex-wrap gap-4 w-full justify-center">

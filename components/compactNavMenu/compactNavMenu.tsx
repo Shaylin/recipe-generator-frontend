@@ -21,7 +21,7 @@ export default function CompactNavMenu({ className }: { className: string }): JS
         <Link href="/projectInfo">
           <p className="text-white hover:text-bright-tone hover:underline">Project Info</p>
         </Link>
-        <Link href="/savouries">
+        <Link href="/projectInfo">
           <p className="text-white hover:text-bright-tone hover:underline">Other Info</p>
         </Link>
       </nav>}
