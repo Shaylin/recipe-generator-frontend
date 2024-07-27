@@ -23,13 +23,13 @@ export default function FeedbackPair(props: { response: GeneratedRecipeResponse 
   
   return (
     <div className="w-full flex flex-row justify-end gap-2">
-      <Button onClick={() => sendFeedback(true)}
+      <Button isIconOnly onClick={() => sendFeedback(true)}
         className={`${feedbackButtonStyle} ${feedbackSent == true && "bg-highlight-tone brightness-150"}`}>
         <Image className="brightness-200" src="images/thumbUp.svg" alt="thumbs up feedback icon" width={24}
           height={24}/>
       </Button>
       
-      <Button onClick={() => sendFeedback(false)}
+      <Button isIconOnly onClick={() => sendFeedback(false)}
         className={`${feedbackButtonStyle} ${feedbackSent == false && "bg-highlight-tone brightness-150"}`}>
         <Image src="images/thumbDown.svg" alt="thumbs up feedback icon" width={24} height={24}/>
       </Button>

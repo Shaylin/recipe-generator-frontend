@@ -7,7 +7,7 @@ export async function POST(request: Request): Promise<Response> {
   const requestBody = await request.json() as RecipeGenerationRequest;
   
   //TODO: validate ingredients beforehand with validation service and return 400 with a message beforehand
-  const completions = await inferenceService.generateRecipe(requestBody.ingredients.split(","));
+  const completions = await inferenceService.generateRecipe(requestBody.ingredients);
   
   const statusCode = completions.success ? 200 : 500;
   

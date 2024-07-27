@@ -1,17 +1,21 @@
 import RecipeInferenceService from "@/services/recipeInference/recipeInferenceService";
 import { GeneratedRecipeResponse } from "@/services/recipeInference/generatedRecipeResponse";
 import { CompletionResponse, OpenAIClient } from "openai-fetch";
+import IngredientsFormattingService from "@/services/ingredientsFormatting/ingredientsFormattingService";
+import ServiceRegistry from "@/services/serviceRegistry";
 
 export default class OpenAIRecipeInferenceService implements RecipeInferenceService {
   private readonly client: OpenAIClient;
+  private readonly ingredientsFormattingService:IngredientsFormattingService;
   
   public constructor(openAiClientGenerator: (apiKey: string, baseUrl: string) => OpenAIClient) {
     this.client = openAiClientGenerator(process.env["INFERENCE_API_KEY"]!, process.env["INFERENCE_API_URL"]!);
+    this.ingredientsFormattingService = ServiceRegistry.getIngredientsFormattingService();
   }
   
   public async generateRecipe(ingredients: string[]): Promise<GeneratedRecipeResponse> {
     
-    const prompt = this.generatePrompt(ingredients)
+    const prompt = this.ingredientsFormattingService.createdFormattedIngredientsPrompt(ingredients);
     
     const generationResponse = await this.client.createCompletions({
       model: "shaylinc/dut-recipe-generator",
@@ -44,11 +48,5 @@ export default class OpenAIRecipeInferenceService implements RecipeInferenceServ
         success: false
       };
     }
-  }
-  
-  private generatePrompt(ingredients: string[]): string {
-    const formattedIngredients = ingredients.map((ingredient: string ) => ingredient.toLowerCase().trim());
-    
-    return '{"prompt": ' + JSON.stringify(formattedIngredients);
   }
 }

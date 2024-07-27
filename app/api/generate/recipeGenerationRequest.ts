@@ -1,3 +1,3 @@
 export interface RecipeGenerationRequest {
-  ingredients: string;
+  ingredients: string[];
 }
