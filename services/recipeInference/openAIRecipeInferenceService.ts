@@ -1,15 +1,15 @@
 import RecipeInferenceService from "@/services/recipeInference/recipeInferenceService";
 import { GeneratedRecipeResponse } from "@/services/recipeInference/generatedRecipeResponse";
-import { CompletionResponse, OpenAIClient } from "openai-fetch";
 import IngredientsFormattingService from "@/services/ingredientsFormatting/ingredientsFormattingService";
 import ServiceRegistry from "@/services/serviceRegistry";
+import CompletionsService from "@/services/completions/completionsService";
 
 export default class OpenAIRecipeInferenceService implements RecipeInferenceService {
-  private readonly client: OpenAIClient;
-  private readonly ingredientsFormattingService:IngredientsFormattingService;
+  private readonly completionsService: CompletionsService;
+  private readonly ingredientsFormattingService: IngredientsFormattingService;
   
-  public constructor(openAiClientGenerator: (apiKey: string, baseUrl: string) => OpenAIClient) {
-    this.client = openAiClientGenerator(process.env["INFERENCE_API_KEY"]!, process.env["INFERENCE_API_URL"]!);
+  public constructor() {
+    this.completionsService = ServiceRegistry.getCompletionsService();
     this.ingredientsFormattingService = ServiceRegistry.getIngredientsFormattingService();
   }
   
@@ -17,25 +17,27 @@ export default class OpenAIRecipeInferenceService implements RecipeInferenceServ
     
     const prompt = this.ingredientsFormattingService.createdFormattedIngredientsPrompt(ingredients);
     
-    const generationResponse = await this.client.createCompletions({
-      model: "shaylinc/dut-recipe-generator",
+    const generationResponse = await this.completionsService.generateCompletions({
+      apiKey: process.env.INFERENCE_API_KEY!,
+      baseUrl: process.env.INFERENCE_API_URL!,
+      modelName: "shaylinc/dut-recipe-generator",
       prompt: prompt,
       temperature: 0.2,
-      max_tokens: 1024
+      maxTokens: 1024
     });
     
-    return this.tryParseRecipeResponse(prompt, generationResponse);
+    return this.tryParseRecipeResponse(generationResponse);
   }
   
-  private tryParseRecipeResponse(prompt: string, generationResponse: CompletionResponse): GeneratedRecipeResponse {
-    if (!generationResponse || !generationResponse.choices) {
+  private tryParseRecipeResponse(generationResponse: string): GeneratedRecipeResponse {
+    if (!generationResponse) {
       return {
         success: false
       };
     }
     
     try {
-      const parsedRecipe = JSON.parse(prompt + generationResponse.choices[0].text);
+      const parsedRecipe = JSON.parse(generationResponse);
       return {
         success: true,
         title: parsedRecipe.title,

@@ -1,4 +1,4 @@
-import { ValidationResponse } from "@/services/ingredientsValidation/validationResponse";
+import { ValidationResponse } from "./validationResponse";
 
 export interface IngredientsValidationService {
   isValid(ingredients: string): ValidationResponse;

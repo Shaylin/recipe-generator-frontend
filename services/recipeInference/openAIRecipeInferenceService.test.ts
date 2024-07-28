@@ -1,11 +1,15 @@
 import OpenAIRecipeInferenceService from "@/services/recipeInference/openAIRecipeInferenceService";
+import IngredientsFormattingService from "@/services/ingredientsFormatting/ingredientsFormattingService";
+import { mock, MockProxy } from "jest-mock-extended";
+import ServiceRegistry from "@/services/serviceRegistry";
+import CompletionsService from "@/services/completions/completionsService";
 
 describe("OpenAIRecipeInferenceService", () => {
   let service: OpenAIRecipeInferenceService;
-  let mockOpenAIClientGenerator: jest.Mock;
-  let fakeOpenAIClient: { createCompletions: jest.Mock };
   let consoleErrorSpy: jest.Mock;
   let originalConsoleError: (args: any) => void;
+  let mockIngredientFormatter: MockProxy<IngredientsFormattingService>;
+  let mockCompletionsService: MockProxy<CompletionsService>;
   
   beforeEach(() => {
     process.env = {
@@ -19,11 +23,14 @@ describe("OpenAIRecipeInferenceService", () => {
     originalConsoleError = console.error;
     console.error = consoleErrorSpy;
     
-    mockOpenAIClientGenerator = jest.fn();
-    fakeOpenAIClient = { createCompletions: jest.fn() };
-    mockOpenAIClientGenerator.mockReturnValue(fakeOpenAIClient);
+    mockCompletionsService = mock<CompletionsService>();
     
-    service = new OpenAIRecipeInferenceService(mockOpenAIClientGenerator);
+    mockIngredientFormatter = mock<IngredientsFormattingService>();
+    
+    ServiceRegistry.getIngredientsFormattingService = jest.fn().mockReturnValue(mockIngredientFormatter);
+    ServiceRegistry.getCompletionsService = jest.fn().mockReturnValue(mockCompletionsService);
+    
+    service = new OpenAIRecipeInferenceService();
   });
   
   afterAll(() => {
@@ -33,27 +40,29 @@ describe("OpenAIRecipeInferenceService", () => {
   describe("Constructor", () => {
     it("Should construct with the provided api key and inference url set as environment variables", () => {
       expect(service).not.toBeNull();
-      
-      expect(mockOpenAIClientGenerator).toHaveBeenCalledWith("fakeKey", "fakeURL");
     })
   });
   
   describe("generateRecipe", () => {
-    it("Should trim and lowercase the input ingredients array before passing it to the inference api", async () => {
-      fakeOpenAIClient.createCompletions.mockResolvedValue({
-        choices: [
-          {
-            text: ', "title": "My Recipe", "ingredients": ["onion", "pepper"], "method": ["mix well"] }'
-          }
-        ]
-      });
+    it("Should format the input ingredients using the ingredients formatting service before passing it to the inference api", async () => {
+      mockCompletionsService.generateCompletions.mockResolvedValue(
+        '{"prompt": ["onion","pepper"], "title": "My Recipe", "ingredients": ["onion", "pepper"], "method": ["mix well"] }'
+      );
       
-      const generatedRecipeResponse = await service.generateRecipe(["OnIoN", "    peppeR "]);
+      mockIngredientFormatter.createdFormattedIngredientsPrompt.mockReturnValue('{"prompt": ["onion","pepper"]');
       
-      expect(fakeOpenAIClient.createCompletions).toHaveBeenCalledWith({
-        model: "shaylinc/dut-recipe-generator",
+      const badlyFormattedIngredients = ["OnIoN", "    peppeR "];
+      
+      await service.generateRecipe(badlyFormattedIngredients);
+      
+      expect(mockIngredientFormatter.createdFormattedIngredientsPrompt).toHaveBeenCalledWith(badlyFormattedIngredients);
+      
+      expect(mockCompletionsService.generateCompletions).toHaveBeenCalledWith({
+        apiKey: "fakeKey",
+        baseUrl: "fakeURL",
+        modelName: "shaylinc/dut-recipe-generator",
         prompt: '{"prompt": ["onion","pepper"]',
-        max_tokens: 1024,
+        maxTokens: 1024,
         temperature: 0.2
       });
     });
@@ -61,20 +70,20 @@ describe("OpenAIRecipeInferenceService", () => {
     
     describe("When the server returns a valid JSON response", () => {
       it("Should return a successful recipe response", async () => {
-        fakeOpenAIClient.createCompletions.mockResolvedValue({
-          choices: [
-            {
-              text: ', "title": "My Recipe", "ingredients": ["onion", "pepper"], "method": ["mix well"] }'
-            }
-          ]
-        });
+        mockCompletionsService.generateCompletions.mockResolvedValue(
+          '{"prompt": ["onion","pepper"], "title": "My Recipe", "ingredients": ["onion", "pepper"], "method": ["mix well"] }'
+        );
+        
+        mockIngredientFormatter.createdFormattedIngredientsPrompt.mockReturnValue('{"prompt": ["onion","pepper"]');
         
         const generatedRecipeResponse = await service.generateRecipe(["onion", "pepper"]);
         
-        expect(fakeOpenAIClient.createCompletions).toHaveBeenCalledWith({
-          model: "shaylinc/dut-recipe-generator",
+        expect(mockCompletionsService.generateCompletions).toHaveBeenCalledWith({
+          apiKey: "fakeKey",
+          baseUrl: "fakeURL",
+          modelName: "shaylinc/dut-recipe-generator",
           prompt: '{"prompt": ["onion","pepper"]',
-          max_tokens: 1024,
+          maxTokens: 1024,
           temperature: 0.2
         });
         
@@ -87,13 +96,11 @@ describe("OpenAIRecipeInferenceService", () => {
     
     describe("When the server returns a response that is not valid JSON", () => {
       it("Should return an empty failure response", async () => {
-        fakeOpenAIClient.createCompletions.mockResolvedValue({
-          choices: [
-            {
-              text: ', "title": "My Recipe", ingredients: ["onionez", "pepper", "method": ["mix well"] }'
-            }
-          ]
-        });
+        mockCompletionsService.generateCompletions.mockResolvedValue(
+          'onion","pepper"], "titl}'
+        );
+        
+        mockIngredientFormatter.createdFormattedIngredientsPrompt.mockReturnValue('{"prompt": ["onion","pepper"]');
         
         const generatedRecipeResponse = await service.generateRecipe(["onion", "pepper"]);
         expect(generatedRecipeResponse.success).toBe(false);
@@ -107,7 +114,9 @@ describe("OpenAIRecipeInferenceService", () => {
     
     describe("When the server does not return a valid response", () => {
       it("Should return an empty failure response", async () => {
-        fakeOpenAIClient.createCompletions.mockResolvedValue(null);
+        mockCompletionsService.generateCompletions.mockResolvedValue(
+          ""
+        );
         
         const generatedRecipeResponse = await service.generateRecipe(["onion", "paper"]);
         expect(generatedRecipeResponse.success).toBe(false);
