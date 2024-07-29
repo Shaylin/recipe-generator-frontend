@@ -7,30 +7,33 @@ import { Button } from "@nextui-org/button";
 export default function FeedbackPair(props: { response: GeneratedRecipeResponse }): JSX.Element {
   const [feedbackSent, setFeedbackSent] = useState<boolean | null>(null);
   
-  const sendFeedback = (good: boolean) => {
-    setFeedbackSent(good);
+  const sendFeedback = (isGoodFeedback: boolean) => {
+    setFeedbackSent(isGoodFeedback);
     
     const responseFeedback: GeneratedRecipeFeedback = {
       response: props.response,
-      good: good
+      good: isGoodFeedback
     };
     
     fetch("/api/feedback", { method: "POST", body: JSON.stringify(responseFeedback) })
       .then(response => response.json());
   };
   
-  let feedbackButtonStyle = feedbackSent == null ? "p-1 rounded hover:bg-highlight-tone bg-transparent" : "p-1 rounded pointer-events-none";
+  const isAnyButtonSelected = feedbackSent === null;
+  const isGoodButtonSelected = feedbackSent === true;
+  const isBadButtonSelected = feedbackSent === false;
+  const feedbackButtonStyle = isAnyButtonSelected ? "hover:bg-highlight-tone bg-transparent" : "pointer-events-none";
   
   return (
     <div className="w-full flex flex-row justify-end gap-2">
       <Button isIconOnly onClick={() => sendFeedback(true)}
-        className={`${feedbackButtonStyle} ${feedbackSent == true && "bg-highlight-tone brightness-150"}`}>
+        className={`p-1 rounded ${feedbackButtonStyle}  ${isGoodButtonSelected ? "bg-highlight-tone" : "bg-transparent"} ${isBadButtonSelected ? "opacity-25" : "opacity-100"}`}>
         <Image className="brightness-200" src="images/thumbUp.svg" alt="thumbs up feedback icon" width={24}
           height={24}/>
       </Button>
       
       <Button isIconOnly onClick={() => sendFeedback(false)}
-        className={`${feedbackButtonStyle} ${feedbackSent == false && "bg-highlight-tone brightness-150"}`}>
+        className={`p-1 rounded ${feedbackButtonStyle} ${isBadButtonSelected ? "bg-highlight-tone" : "bg-transparent"} ${isGoodButtonSelected ? "opacity-25" : "opacity-100"}`}>
         <Image src="images/thumbDown.svg" alt="thumbs up feedback icon" width={24} height={24}/>
       </Button>
     </div>
