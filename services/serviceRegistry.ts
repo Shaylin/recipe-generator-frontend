@@ -3,11 +3,14 @@ import OpenAIRecipeInferenceService from "@/services/recipeInference/openAIRecip
 import IngredientsFormattingService from "@/services/ingredientsFormatting/ingredientsFormattingService";
 import CompletionsService from "@/services/completions/completionsService";
 import OpenAICompletionsService from "@/services/completions/openAICompletionsService";
+import FeedbackService from "@/services/feedback/feedbackService";
+import DynamoDbFeedbackService from "@/services/feedback/dynamoDbFeedbackService";
 
 export default class ServiceRegistry {
   private static completionsService: CompletionsService;
   private static recipeInferenceService: RecipeInferenceService;
   private static ingredientsFormattingService: IngredientsFormattingService;
+  private static feedbackService: FeedbackService;
   
   public static getCompletionsService(): CompletionsService {
     if (this.completionsService == null) {
@@ -31,5 +34,13 @@ export default class ServiceRegistry {
     }
     
     return this.ingredientsFormattingService;
+  }
+  
+  public static getFeedbackService(): FeedbackService {
+    if (this.feedbackService == null) {
+      this.feedbackService = new DynamoDbFeedbackService();
+    }
+    
+    return this.feedbackService;
   }
 }

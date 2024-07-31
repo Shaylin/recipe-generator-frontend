@@ -6,7 +6,7 @@ import { GeneratedRecipeResponse } from "@/services/recipeInference/generatedRec
 import RecipeDisplay from "@/components/recipeDisplay/recipeDisplay";
 import FeedbackPair from "@/components/feedbackPair/feedbackPair";
 import { Button } from "@nextui-org/button";
-import {Spinner} from "@nextui-org/spinner";
+import { Spinner } from "@nextui-org/spinner";
 import AttentionCard from "@/components/attentionCard/attentionCard";
 import Disclaimer from "@/components/disclaimer/disclaimer";
 
@@ -39,7 +39,7 @@ export default function RecipeGenerator(): JSX.Element {
       {isGenerating && <Spinner className="text-light-tone" color="warning" size="lg"/>}
       
       {(recipe?.success && !isGenerating) && <RecipeDisplay recipe={recipe}/>}
-
+      
       {(recipe?.success && !isGenerating) && <Disclaimer/>}
       
       {(recipe?.success && !isGenerating) && <FeedbackPair response={recipe!}/>}

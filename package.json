@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "npx jest"
+    "test:api": "npx jest app/api/ --config app/api/jest.config.ts",
+    "test:services": "npx jest services/ --config services/jest.config.ts",
+    "test:client": "npx jest",
+    "test": "npm run test:api && npm run test:services && npm run test:client"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.609.0",
@@ -32,6 +35,7 @@
     "jest-mock-extended": "^3.0.7",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
+    "ts-jest": "^29.2.3",
     "ts-node": "^10.9.2",
     "typescript": "^5"
   }

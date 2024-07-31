@@ -6,16 +6,22 @@ const createJestConfig = nextJest({
   dir: "./",
 })
 
+
 // Add any custom config to be passed to Jest
 const config: Config = {
+  collectCoverage: true,
   coverageProvider: "v8",
   testEnvironment: "jsdom",
   moduleNameMapper: {
     "^@/components/(.*)$": "<rootDir>/components/$1",
-    "^@/services/(.*)$": "<rootDir>/services/$1"
-  }
-  // Add more setup options before each test is run
-  // setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+    "^@/services/(.*)$": "<rootDir>/services/$1",
+    "^@/app/(.*)$": "<rootDir>/../../app/$1"
+  },
+  testPathIgnorePatterns: [
+    "/node_modules/",
+    "./app/api/",
+    "./services"
+  ],
 }
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
