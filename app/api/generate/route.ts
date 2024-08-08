@@ -1,7 +1,8 @@
 import ServiceRegistry from "@/services/serviceRegistry";
 import { RecipeGenerationRequest } from "@/app/api/generate/recipeGenerationRequest";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: Request): Promise<Response> {
+export async function POST(request: NextRequest): Promise<NextResponse> {
   const inferenceService = ServiceRegistry.getRecipeInferenceService();
   
   const requestBody = await request.json() as RecipeGenerationRequest;
@@ -11,5 +12,5 @@ export async function POST(request: Request): Promise<Response> {
   
   const statusCode = completions.success ? 200 : 500;
   
-  return new Response(JSON.stringify(completions), { status: statusCode });
+  return new NextResponse(JSON.stringify(completions), { status: statusCode });
 }

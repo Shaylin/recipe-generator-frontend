@@ -3,6 +3,7 @@ import { mock, MockProxy } from "jest-mock-extended";
 import FeedbackService from "@/services/feedback/feedbackService";
 import { GeneratedRecipeFeedback } from "@/app/api/feedback/generatedRecipeFeedback";
 import { POST } from "@/app/api/feedback/route";
+import { NextRequest } from "next/server";
 
 describe("Feedback Route", () => {
   let mockFeedbackService: MockProxy<FeedbackService>;
@@ -30,7 +31,7 @@ describe("Feedback Route", () => {
         json: async () => fakeFeedback
       };
       
-      const response = await POST(fakeRequest as unknown as Request);
+      const response = await POST(fakeRequest as unknown as NextRequest);
       
       expect(response.status).toBe(200);
     });
