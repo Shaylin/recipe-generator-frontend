@@ -36,4 +36,28 @@ describe("Feedback Route", () => {
       expect(response.status).toBe(200);
     });
   });
+  
+  describe("When the feedback request is not successful", () => {
+    it("Should return a status 500", async () => {
+      mockFeedbackService.sendFeedback.mockResolvedValueOnce(false);
+      
+      const fakeFeedback: GeneratedRecipeFeedback = {
+        good: false,
+        response: {
+          success: true,
+          title: "active pizza",
+          ingredients: ["flour", "yeast", "salt", "olive oil", "water", "tomato", "cheese", "basil"],
+          method: ["bake", "enjoy"]
+        }
+      };
+      
+      const fakeRequest = {
+        json: async () => fakeFeedback
+      };
+      
+      const response = await POST(fakeRequest as unknown as NextRequest);
+      
+      expect(response.status).toBe(500);
+    });
+  });
 })

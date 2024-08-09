@@ -40,7 +40,7 @@ export default function RecipeGenerator(): JSX.Element {
       <AttentionCard/>
       
       <div className="flex flex-row flex-wrap gap-2 w-full justify-center">
-        <div className="flex gap-4 w-full flex-wrap justify-center">
+        <div className="flex gap-4 w-full flex-wrap justify-center p-4">
           {ingredients.map((ingredient: string, ingredientIndex: number) => {
             return (
               <Chip key={ingredient} onClose={() => removeFromIngredients(ingredientIndex)}>
