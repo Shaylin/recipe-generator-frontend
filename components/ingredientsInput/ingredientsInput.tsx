@@ -9,7 +9,7 @@ export default function IngredientsInput(props: {
 }): JSX.Element {
   const [currentIngredient, setCurrentIngredient] = useState<string>("");
   
-  const addIngredient = (ingredient: string): void => {
+  const addCurrentIngredient = (): void => {
     if (currentIngredient.trim() === "") return;
     props.onIngredientAdded(currentIngredient.trim());
     setCurrentIngredient("");
@@ -17,7 +17,7 @@ export default function IngredientsInput(props: {
   
   const onKeyDown = (event: KeyboardEvent<HTMLInputElement>): void => {
     if (event.key === "Enter" || event.key === "," || event.key === ".") {
-      addIngredient(currentIngredient);
+      addCurrentIngredient();
     }
   };
   
@@ -27,7 +27,7 @@ export default function IngredientsInput(props: {
   }
   
   const onAddClicked = (): void => {
-    addIngredient(currentIngredient);
+    addCurrentIngredient();
   }
   
   return (
