@@ -14,7 +14,7 @@ export default class ServiceRegistry {
   
   public static getCompletionsService(): CompletionsService {
     if (this.completionsService == null) {
-      this.completionsService = new OpenAICompletionsService();
+      this.completionsService = new OpenAICompletionsService(fetch);
     }
     
     return this.completionsService;
@@ -22,7 +22,8 @@ export default class ServiceRegistry {
   
   public static getRecipeInferenceService(): RecipeInferenceService {
     if (this.recipeInferenceService == null) {
-      this.recipeInferenceService = new OpenAIRecipeInferenceService();
+      this.recipeInferenceService = new OpenAIRecipeInferenceService()
+      ;
     }
     
     return this.recipeInferenceService;

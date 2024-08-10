@@ -2,10 +2,16 @@ import CompletionParameters from "@/services/completions/completionParameters";
 import CompletionsService from "@/services/completions/completionsService";
 
 export default class OpenAICompletionsService implements CompletionsService {
+  private readonly fetchDelegate: (url: string, init: RequestInit) => Promise<Response>;
+  
+  constructor(fetchDelegate: (url: string, init: RequestInit) => Promise<Response>) {
+    this.fetchDelegate = fetchDelegate;
+  }
+  
   async generateCompletions(parameters: CompletionParameters): Promise<string> {
     const completionUrl = `${parameters.baseUrl}/completions`;
     
-    const response = await fetch(completionUrl,
+    const response = await this.fetchDelegate(completionUrl,
       {
         method: "POST",
         body: JSON.stringify(
