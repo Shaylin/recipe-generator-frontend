@@ -34,7 +34,7 @@ export default function IngredientsInput(props: {
     <div className="flex flex-row gap-2">
       <Input
         type="text"
-        placeholder="Enter An Ingredient"
+        placeholder="Enter an Ingredient"
         value={currentIngredient}
         className="min-w-32"
         onValueChange={onValueChange}

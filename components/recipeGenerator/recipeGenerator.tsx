@@ -35,10 +35,9 @@ export default function RecipeGenerator(): JSX.Element {
   
   return (
     <div
-      className="flex flex-col items-center max-w-screen-lg sm:w-10/12 w-11/12 bg-light-tone p-6 rounded-xl shadow gap-8">
+      className="flex flex-col items-center justify-around max-w-screen-lg min-h-96 sm:w-10/12 w-11/12 bg-light-tone p-6 rounded-xl shadow gap-8">
       
       <InstructionsCard/>
-      
       
       <div className="flex gap-2 w-full flex-wrap justify-center">
         {ingredients.map((ingredient: string, ingredientIndex: number) => {

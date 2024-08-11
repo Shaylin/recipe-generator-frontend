@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .min-h-screen-minus-32 {
+    min-height: calc(100vh - 8rem); /* 32 tailwind units are 8rem */
+  }
+}
+
 body {
     color: #000000;
     background: #CFD9CF;
