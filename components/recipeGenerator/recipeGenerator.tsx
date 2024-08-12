@@ -8,7 +8,6 @@ import FeedbackPair from "@/components/feedbackPair/feedbackPair";
 import { Button } from "@nextui-org/button";
 import { Spinner } from "@nextui-org/spinner";
 import InstructionsCard from "@/components/instructionsCard/instructionsCard";
-import Disclaimer from "@/components/disclaimer/disclaimer";
 import { Chip } from "@nextui-org/react";
 
 export default function RecipeGenerator(): JSX.Element {
@@ -35,7 +34,7 @@ export default function RecipeGenerator(): JSX.Element {
   
   return (
     <div
-      className="flex flex-col items-center justify-around max-w-screen-lg min-h-96 sm:w-10/12 w-11/12 bg-light-tone p-6 rounded-xl shadow gap-8">
+      className="flex flex-col items-center justify-around max-w-screen-lg min-h-96 sm:w-10/12 w-full bg-light-tone p-6 rounded-xl shadow gap-8">
       
       <InstructionsCard/>
       
@@ -65,7 +64,6 @@ export default function RecipeGenerator(): JSX.Element {
       {isGenerating && <Spinner className="text-light-tone" color="warning" size="lg"/>}
       
       {successfullyGenerated && <RecipeDisplay recipe={recipe}/>}
-      {successfullyGenerated && <Disclaimer/>}
       {successfullyGenerated && <FeedbackPair response={recipe!}/>}
     </div>
   )
