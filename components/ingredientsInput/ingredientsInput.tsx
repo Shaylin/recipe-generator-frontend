@@ -1,6 +1,5 @@
-import React, { ChangeEvent, JSX, KeyboardEvent, useState } from "react";
+import React, { JSX, KeyboardEvent, useState } from "react";
 import { Input } from "@nextui-org/input";
-import { Chip } from "@nextui-org/react";
 import { Button } from "@nextui-org/button";
 
 export default function IngredientsInput(props: {

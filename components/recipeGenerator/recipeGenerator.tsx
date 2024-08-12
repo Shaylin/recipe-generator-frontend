@@ -25,7 +25,7 @@ export default function RecipeGenerator(): JSX.Element {
       .finally(() => setIsGenerating(false));
   };
   
-  const successfullyGenerated = recipe?.success && !isGenerating;
+  const successfullyGenerated = recipe?.success;
   
   const removeFromIngredients = (ingredientIndex: number) => {
     setIngredients((existingIngredients: string[]) => {
