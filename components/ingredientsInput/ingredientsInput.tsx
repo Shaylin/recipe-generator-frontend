@@ -27,10 +27,13 @@ export default function IngredientsInput(props: {
     setCurrentIngredient(value);
   }
   
-  const onAddClicked = (): void => {
+  const onAddClicked = (event: React.MouseEvent<HTMLButtonElement>): void => {
+    event.stopPropagation();
+    
     if (ref?.current) {
       ref.current.focus();
     }
+    
     addCurrentIngredient();
   }
   
