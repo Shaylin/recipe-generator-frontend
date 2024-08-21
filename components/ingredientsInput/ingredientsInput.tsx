@@ -1,12 +1,14 @@
-import React, { JSX, KeyboardEvent, useState } from "react";
+import React, { JSX, KeyboardEvent, useRef, useState } from "react";
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
+import Image from "next/image";
 
 export default function IngredientsInput(props: {
   onIngredientAdded: (ingredient: string) => void,
   isGenerating: boolean
 }): JSX.Element {
   const [currentIngredient, setCurrentIngredient] = useState<string>("");
+  const ref = useRef<HTMLInputElement>(null);
   
   const addCurrentIngredient = (): void => {
     if (currentIngredient.trim() === "") return;
@@ -26,22 +28,31 @@ export default function IngredientsInput(props: {
   }
   
   const onAddClicked = (): void => {
+    if (ref?.current) {
+      ref.current.focus();
+    }
     addCurrentIngredient();
   }
   
   return (
-    <div className="flex flex-row gap-2">
+    <div className="flex relative">
       <Input
         type="text"
         placeholder="Enter an Ingredient"
         value={currentIngredient}
-        className="min-w-32"
+        className="min-w-64"
         onValueChange={onValueChange}
         onKeyDown={onKeyDown}
+        size="lg"
         isDisabled={props.isGenerating}
+        ref={ref}
       />
-      
-      <Button isDisabled={props.isGenerating} onClick={onAddClicked} color="secondary">Add</Button>
+      {currentIngredient.length > 2 &&
+        <Button className="absolute right-1 top-2/4 -translate-y-2/4 z-10" size="md" isIconOnly={true}
+          isDisabled={props.isGenerating} onClick={onAddClicked} color="secondary">
+          <Image className="brightness-200" src="images/return.svg" alt="thumbs up feedback icon" width={24}
+            height={24}/>
+        </Button>}
     </div>
   )
 }

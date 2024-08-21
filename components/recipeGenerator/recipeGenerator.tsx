@@ -41,7 +41,7 @@ export default function RecipeGenerator(): JSX.Element {
       <div className="flex gap-2 w-full flex-wrap justify-center">
         {ingredients.map((ingredient: string, ingredientIndex: number) => {
           return (
-            <Chip key={ingredientIndex} size="md" onClose={() => removeFromIngredients(ingredientIndex)}
+            <Chip key={ingredientIndex} size="lg" onClose={() => removeFromIngredients(ingredientIndex)}
               isDisabled={isGenerating}>
               {ingredient}
             </Chip>)
@@ -55,6 +55,7 @@ export default function RecipeGenerator(): JSX.Element {
       <Button
         onClick={generateRecipe}
         color="primary"
+        size="lg"
         className={`btn btn-neutral w-64 ${isGenerating ? "animate-pulse pointer-events-none" : null}`}
       >
         {isGenerating ? "Generating..." : "Generate!"}
