@@ -18,10 +18,18 @@ export default function RecipeGenerator(): JSX.Element {
   const generateRecipe = () => {
     setIsGenerating(true);
     
+    console.warn("Starting generation for " + JSON.stringify(ingredients));
+    
     fetch("/api/generate", { method: "POST", body: JSON.stringify({ ingredients }) })
       .then(response => response.json())
-      .then(data => setRecipe(data))
-      .finally(() => setIsGenerating(false));
+      .then(data => {
+        console.warn("Setting the data " + JSON.stringify(ingredients));
+        setRecipe(data)
+      })
+      .finally(() => {
+        console.warn("Ending generation " + JSON.stringify(ingredients));
+        setIsGenerating(false)
+      });
   };
   
   const successfullyGenerated = recipe?.success;
