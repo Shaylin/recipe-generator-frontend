@@ -26,6 +26,11 @@ export default function RecipeGenerator(): JSX.Element {
         console.warn("Setting the data " + JSON.stringify(ingredients));
         setRecipe(data)
       })
+      .catch((error) => {
+        console.error("Failed to parse recipe");
+        console.error(JSON.stringify(error));
+        console.error(JSON.stringify(recipe));
+      })
       .finally(() => {
         console.warn("Ending generation " + JSON.stringify(ingredients));
         setIsGenerating(false)
