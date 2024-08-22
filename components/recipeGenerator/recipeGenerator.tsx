@@ -77,8 +77,8 @@ export default function RecipeGenerator(): JSX.Element {
       
       {isGenerating && <Spinner className="text-light-tone" color="warning" size="lg"/>}
       
-      {successfullyGenerated && <RecipeDisplay recipe={recipe}/>}
-      {successfullyGenerated && <FeedbackPair response={recipe!}/>}
+      {successfullyGenerated && !isGenerating && <RecipeDisplay recipe={recipe}/>}
+      {successfullyGenerated && !isGenerating && <FeedbackPair response={recipe!}/>}
     </div>
   )
 }
