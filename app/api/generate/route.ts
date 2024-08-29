@@ -2,6 +2,8 @@ import ServiceRegistry from "@/services/serviceRegistry";
 import { RecipeGenerationRequest } from "@/app/api/generate/recipeGenerationRequest";
 import { NextRequest, NextResponse } from "next/server";
 
+export const maxDuration = 40;
+
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const inferenceService = ServiceRegistry.getRecipeInferenceService();
   
