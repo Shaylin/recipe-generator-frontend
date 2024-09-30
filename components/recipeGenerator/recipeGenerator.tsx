@@ -1,4 +1,4 @@
-import { JSX } from "react";
+import  { JSX } from "react";
 import { redirect } from "next/navigation";
 
 export default function RecipeGenerator(): JSX.Element {
